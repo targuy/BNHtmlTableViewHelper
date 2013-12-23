@@ -1,14 +1,16 @@
 Pod::Spec.new do |s|
   s.name         = "BNHtmlTableViewHelper"
-  s.version      = "0.1.0"
+  s.version      = "0.1.1"
   s.dependency	 'hpple'
   s.dependency	 'BlocksKit'
   s.summary      = "Class to help a UITableViewController to manage an HTML Table from a website as a datasource "
   s.description  = <<-DESC
-                    An optional longer description of BNHtmlTableViewHelper
+BNHtmlTableViewHelper
+=====================
 
-                    * Markdown format.
-                    * Don't worry about the indent, we strip it!
+## This library contains :
+- a category to TFHpple to read in one shot a lot of data from a template and return it in NSMutableDictionnary.
+- a Class that use that NSMutableDictionnary as initializer to help a UITableViewController to manage an HTML Table from a website as a datasource 
                    DESC
   s.homepage     = "https://github.com/targuy/BNHtmlTableViewHelper"
   s.screenshots  = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
