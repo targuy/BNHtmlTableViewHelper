@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "BNHtmlTableViewHelper"
-  s.version      = "0.1.3"
+  s.version      = "0.1.4"
   s.dependency	 'hpple'
   s.dependency	 'BlocksKit'
   s.summary      = "Class to help a UITableViewController to manage an HTML Table from a website as a datasource "
