@@ -6,12 +6,15 @@ This library contains :
 - a Class that use that NSMutableDictionnary as initializer to help a UITableViewController to manage an HTML Table from a website as a datasource 
 
 
-Example of category usage :
+<b>Example of category usage :</b>
 
 1) Define a template for your table simply with this litteral syntax.
 
-The template is an NSArray of NSDictionnaries.
-Each NSArray item is a column you want to read, each dictionnary contains the column name, the XPath and a Block to perform on the return of XPath request.
+- The template is an NSArray of NSDictionnaries.
+- Each NSArray item is a column you want to read, 
+- each dictionnary contains the column name, 
+- the XPath and 
+- a Block to perform on the return of XPath request.
 
 a) Choose every key name for column name you want to extract.
 b) With an html inspector, extract the XPath element you need from the webpage.
@@ -40,24 +43,24 @@ TFHpple *parser=[TFHpple hppleWithHTMLData:htmlData];
 c) Call the new hpple method included to return a NSMutable Dictionnay that contains a NSArray (if several lines) for each key.
 NSMutableDictionary *currentCatDict=[parser searchArrayWithXPathDictionaryQuery:activeTemplate];
 
-Example of BNHtmlTable usage :
+<b>Example of BNHtmlTable usage :</b>
 
 1) After the call to TFHpple category above, Create a BHtmlTable with the dictionnary :
 BNHtmlTable *htmltable=[[BNHtmlTable alloc ]initWithDictionary:currentCatDict];
 
 2) Use the BNHtmlTable in your delegate :
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
         // Return the number of sections.
     return [htmltable numberOfSections];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
         // Return the number of rows in the section.
     return [htmltable numberOfRowsInSection:section];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
         // return section title
     return [htmltable titleHeaderInSection:section];
 }
