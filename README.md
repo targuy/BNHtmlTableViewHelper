@@ -1,22 +1,30 @@
 BNHtmlTableViewHelper
 =====================
+##Objectives
+- To have a simple and concise way to extract a lot of data from html pages especially inside tables
+- Help a UITableViewController to present them in a UITableView.
 
 ## This library contains :
-- a category to TFHpple to read in one shot a lot of data from a template and return it in NSMutableDictionnary.
-- a Class that use that NSMutableDictionnary as initializer to help a UITableViewController to manage an HTML Table from a website as a datasource 
+- A category to TFHpple adding method *searchArrayWithXPathDictionaryQuery:* to read in one shot several datas (for example columns in a table) from a template (that could be selected in your code to support multiple templates in a site) and return it in NSMutableDictionnary.
+- A Class *BNHtmlTable* that use that NSMutableDictionnary in his initializer to help a UITableViewController to manage an HTML Table from a website as a datasource 
 
 
-##Example of category usage :
+##Example of searchArrayWithXPathDictionaryQuery: usage 
 
-###1) Define a template for your table simply with this litteral syntax.
+###1) Define a template to analyze, process and store your table in 1 line of this litteral syntax.
 
-- The template is an NSArray of NSDictionnaries.
-- Each NSArray item is a column you want to read, 
-- each dictionnary contains the column name with key "key", 
-- the XPath with key "Xpath" and 
-- a Block to perform on the return of XPath request with the key "Block".
+`@[     @{ @"Key": @"myVariable",@"Xpath": @"//tbody/tr/td/text()",@"Block":[myBlock copy] }      
+];`
 
-#####a) Choose every key name for column name you want to extract.
+Particulary efficient with multiple variables, (see complete example below).
+
+- The template is an NSArray of NSDictionnary.
+- Each NSArray item is a data list for example a column you want to read, 
+- Each NSDictionnary contains the column name with key @"Key", 
+- the XPath with key @"Xpath" and 
+- a Block to perform on the return of XPath request with the key @"Block".
+
+#####a) Choose every key name for column or list you want to extract.
 #####b) With an html inspector, extract the XPath element you need from the webpage.
 #####c) Write or reuse the appropriate Block for what you want to do.
 ```
@@ -31,6 +39,8 @@ NSArray *template=@[
    @{@"Key":@"Sections",@"Xpath":@"//tbody",                @"Block":[headerWithDate copy]} 
                   ];
 ```
+**The @"Sections" key is special, it must have been construct in the format described below by your block.**
+
 ###2) Get the data
 
 #####a) Get the page
@@ -45,8 +55,30 @@ TFHpple *parser=[TFHpple hppleWithHTMLData:htmlData];
 ```
 #####c) Call the new hpple method included to return a NSMutable Dictionnay that contains a NSArray (if several lines) for each key.
 ```
-NSMutableDictionary *currentCatDict=[parsersearchArrayWithXPathDictionaryQuery:activeTemplate];
+NSMutableDictionary *currentCatDict=[parser searchArrayWithXPathDictionaryQuery:template];
 ```
+##Example of Blocks :
+```
+typedef NSString *(^element)(TFHppleElement *);
+
+element elementAHref = ^(TFHppleElement *el) {
+        NSString *aString=[[el firstChildWithTagName:@"a"] objectForKey:@"href"];
+        if (!aString) {
+            aString=@"empty";
+        }
+        return aString;
+    };
+element elementTexte = ^(TFHppleElement *el) {
+     	NSString *aString=[el content];
+        if (!aString) {
+            aString=@"empty";
+        }
+        return aString;
+    };
+
+
+```
+
 ##Example of BNHtmlTable usage :
 
 ####1) After the call to TFHpple category above, Create a BHtmlTable with the dictionnary :
@@ -54,6 +86,10 @@ NSMutableDictionary *currentCatDict=[parsersearchArrayWithXPathDictionaryQuery:a
 BNHtmlTable *htmltable=[[BNHtmlTable alloc ]initWithDictionary:currentCatDict];
 ```
 ####2) Use the BNHtmlTable in your delegate :
+##### a) Section management
+
+The Object with @"Section" key must be a NSMutableArray containing a NSDictionnary per section with the following keys @"Title" that is a NSString and @"Rows" that is an int.
+
 ```
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
         // Return the number of sections.
@@ -69,19 +105,14 @@ BNHtmlTable *htmltable=[[BNHtmlTable alloc ]initWithDictionary:currentCatDict];
         // return section title
     return [htmltable titleHeaderInSection:section];
 }
-
+```
+##### b) Cell setup with the NSDictionnary using litterals
+```
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  UITableViewCall *cell = (BNCell *)[tableView dequeueReusableCellWithIdentifier:@"myidentifier"];
-
-```
-
-##### a) Simply call
-```
-    NSDictionary *hcell=[htmltable rowAtIndexPath:indexPath];
-```
-##### b) Do your setup with that NSDictionnary with litterals
-```
-    self.keynameOutlet.text=hcell[@"keyname"];
+UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"myidentifier"];
+NSDictionary *hcell=[htmltable rowAtIndexPath:indexPath];
+// Set the controls for example using outlet from IB
+self.keynameOutlet.text=hcell[@"keyname"];
 ```
 
 
