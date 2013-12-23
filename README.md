@@ -12,11 +12,11 @@ BNHtmlTableViewHelper
 
 - The template is an NSArray of NSDictionnaries.
 - Each NSArray item is a column you want to read, 
-- each dictionnary contains the column name, 
-- the XPath and 
-- a Block to perform on the return of XPath request.
+- each dictionnary contains the column name with key "key", 
+- the XPath with key "Xpath" and 
+- a Block to perform on the return of XPath request with the key "Block".
 
-####a) Choose every key name for column name you want to extract.
+#####a) Choose every key name for column name you want to extract.
 #####b) With an html inspector, extract the XPath element you need from the webpage.
 #####c) Write or reuse the appropriate Block for what you want to do.
 ```
@@ -49,11 +49,11 @@ NSMutableDictionary *currentCatDict=[parsersearchArrayWithXPathDictionaryQuery:a
 ```
 ##Example of BNHtmlTable usage :
 
-###1) After the call to TFHpple category above, Create a BHtmlTable with the dictionnary :
+####1) After the call to TFHpple category above, Create a BHtmlTable with the dictionnary :
 ```
 BNHtmlTable *htmltable=[[BNHtmlTable alloc ]initWithDictionary:currentCatDict];
 ```
-###2) Use the BNHtmlTable in your delegate :
+####2) Use the BNHtmlTable in your delegate :
 ```
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
         // Return the number of sections.
@@ -75,7 +75,7 @@ BNHtmlTable *htmltable=[[BNHtmlTable alloc ]initWithDictionary:currentCatDict];
 
 ```
 
-#### a) Simply call
+##### a) Simply call
 ```
     NSDictionary *hcell=[htmltable rowAtIndexPath:indexPath];
 ```
