@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Bnhtmltableviewhelper by targuy</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/targuy/BNHtmlTableViewHelper">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/targuy/BNHtmlTableViewHelper/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/targuy/BNHtmlTableViewHelper/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Bnhtmltableviewhelper</h1>
+          <p>Class to help a UITableViewController to manage an HTML Table from a website as a datasource </p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/targuy">targuy</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="bnhtmltableviewhelper" class="anchor" href="#bnhtmltableviewhelper"><span class="octicon octicon-link"></span></a>BNHtmlTableViewHelper</h1>
+
+<h2>
+<a name="objectives" class="anchor" href="#objectives"><span class="octicon octicon-link"></span></a>Objectives</h2>
+
+<ul>
+<li>To have a simple and concise way to extract a lot of data from html pages especially inside tables</li>
+<li>Help a UITableViewController to present them in a UITableView.</li>
+</ul><h2>
+<a name="this-library-contains-" class="anchor" href="#this-library-contains-"><span class="octicon octicon-link"></span></a>This library contains :</h2>
+
+<ul>
+<li>A category to TFHpple adding method <em>searchArrayWithXPathDictionaryQuery:</em> to read in one shot several datas (for example columns in a table) from a template (that could be selected in your code to support multiple templates in a site) and return it in NSMutableDictionnary.</li>
+<li>A Class <em>BNHtmlTable</em> that use that NSMutableDictionnary in his initializer to help a UITableViewController to manage an HTML Table from a website as a datasource </li>
+</ul><h2>
+<a name="example-of-searcharraywithxpathdictionaryquery-usage" class="anchor" href="#example-of-searcharraywithxpathdictionaryquery-usage"><span class="octicon octicon-link"></span></a>Example of searchArrayWithXPathDictionaryQuery: usage</h2>
+
+<h3>
+<a name="1-define-a-template-to-analyze-process-and-store-your-table-in-1-line-of-this-litteral-syntax" class="anchor" href="#1-define-a-template-to-analyze-process-and-store-your-table-in-1-line-of-this-litteral-syntax"><span class="octicon octicon-link"></span></a>1) Define a template to analyze, process and store your table in 1 line of this litteral syntax.</h3>
+
+<p><code>@[     @{ @"Key": @"myVariable",@"Xpath": @"//tbody/tr/td/text()",@"Block":[myBlock copy] }      
+];</code></p>
+
+<p>Particulary efficient with multiple variables, (see complete example below).</p>
+
+<ul>
+<li>The template is an NSArray of NSDictionnary.</li>
+<li>Each NSArray item is a data list for example a column you want to read, </li>
+<li>Each NSDictionnary contains the column name with key @"Key", </li>
+<li>the XPath with key @"Xpath" and </li>
+<li>a Block to perform on the return of XPath request with the key @"Block".</li>
+</ul><h5>
+<a name="a-choose-every-key-name-for-column-or-list-you-want-to-extract" class="anchor" href="#a-choose-every-key-name-for-column-or-list-you-want-to-extract"><span class="octicon octicon-link"></span></a>a) Choose every key name for column or list you want to extract.</h5>
+
+<h5>
+<a name="b-with-an-html-inspector-extract-the-xpath-element-you-need-from-the-webpage" class="anchor" href="#b-with-an-html-inspector-extract-the-xpath-element-you-need-from-the-webpage"><span class="octicon octicon-link"></span></a>b) With an html inspector, extract the XPath element you need from the webpage.</h5>
+
+<h5>
+<a name="c-write-or-reuse-the-appropriate-block-for-what-you-want-to-do" class="anchor" href="#c-write-or-reuse-the-appropriate-block-for-what-you-want-to-do"><span class="octicon octicon-link"></span></a>c) Write or reuse the appropriate Block for what you want to do.</h5>
+
+<pre><code>NSArray *template=@[
+   @{@"Key":@"fileName",@"Xpath":@"//tbody/tr/td[8]/text()",@"Block":[elementTexte copy]},
+   @{@"Key":@"fileSize",@"Xpath":@"//tbody/tr/td[9]/text()",@"Block":[elementTexte copy]},                                               
+   @{@"Key":@"titre",   @"Xpath":@"//tbody/tr/td[5]",       @"Block":[elementAorText copy]},                                               
+   @{@"Key":@"titreURL",@"Xpath":@"//tbody/tr/td[5]",       @"Block":[elementAorTextURL copy]},                                               
+   @{@"Key":@"lang",    @"Xpath":@"//tbody/tr/td[6]/img",   @"Block":[elementAlt copy]},
+   @{@"Key":@"par2",    @"Xpath":@"//tbody/tr/td[10]",      @"Block":[elementImageAlt copy]},
+   @{@"Key":@"nfo",     @"Xpath":@"//tbody/tr/td[10]",      @"Block":[elementAHref copy]},
+   @{@"Key":@"Sections",@"Xpath":@"//tbody",                @"Block":[headerWithDate copy]} 
+                  ];
+</code></pre>
+
+<p><strong>The @"Sections" key is special, it must have been construct in the format described below by your block.</strong></p>
+
+<h3>
+<a name="2-get-the-data" class="anchor" href="#2-get-the-data"><span class="octicon octicon-link"></span></a>2) Get the data</h3>
+
+<h5>
+<a name="a-get-the-page" class="anchor" href="#a-get-the-page"><span class="octicon octicon-link"></span></a>a) Get the page</h5>
+
+<pre><code>NSString *url=@"http://www.example.com/api/?request=test";
+NSURL *searchUrl=[NSURL URLWithString:url];
+NSData *htmlData=[NSData dataWithContentsOfURL:searchUrl];
+</code></pre>
+
+<h5>
+<a name="b-parse-it-with-hpple-library" class="anchor" href="#b-parse-it-with-hpple-library"><span class="octicon octicon-link"></span></a>b) Parse it with hpple library</h5>
+
+<pre><code>TFHpple *parser=[TFHpple hppleWithHTMLData:htmlData];
+</code></pre>
+
+<h5>
+<a name="c-call-the-new-hpple-method-included-to-return-a-nsmutable-dictionnay-that-contains-a-nsarray-if-several-lines-for-each-key" class="anchor" href="#c-call-the-new-hpple-method-included-to-return-a-nsmutable-dictionnay-that-contains-a-nsarray-if-several-lines-for-each-key"><span class="octicon octicon-link"></span></a>c) Call the new hpple method included to return a NSMutable Dictionnay that contains a NSArray (if several lines) for each key.</h5>
+
+<pre><code>NSMutableDictionary *currentCatDict=[parser searchArrayWithXPathDictionaryQuery:template];
+</code></pre>
+
+<h2>
+<a name="example-of-blocks-" class="anchor" href="#example-of-blocks-"><span class="octicon octicon-link"></span></a>Example of Blocks :</h2>
+
+<pre><code>typedef NSString *(^element)(TFHppleElement *);
+
+element elementAHref = ^(TFHppleElement *el) {
+        NSString *aString=[[el firstChildWithTagName:@"a"] objectForKey:@"href"];
+        if (!aString) {
+            aString=@"empty";
+        }
+        return aString;
+    };
+element elementTexte = ^(TFHppleElement *el) {
+        NSString *aString=[el content];
+        if (!aString) {
+            aString=@"empty";
+        }
+        return aString;
+    };
+
+
+</code></pre>
+
+<h2>
+<a name="example-of-bnhtmltable-usage-" class="anchor" href="#example-of-bnhtmltable-usage-"><span class="octicon octicon-link"></span></a>Example of BNHtmlTable usage :</h2>
+
+<h4>
+<a name="1-after-the-call-to-tfhpple-category-above-create-a-bhtmltable-with-the-dictionnary-" class="anchor" href="#1-after-the-call-to-tfhpple-category-above-create-a-bhtmltable-with-the-dictionnary-"><span class="octicon octicon-link"></span></a>1) After the call to TFHpple category above, Create a BHtmlTable with the dictionnary :</h4>
+
+<pre><code>BNHtmlTable *htmltable=[[BNHtmlTable alloc ]initWithDictionary:currentCatDict];
+</code></pre>
+
+<h4>
+<a name="2-use-the-bnhtmltable-in-your-delegate-" class="anchor" href="#2-use-the-bnhtmltable-in-your-delegate-"><span class="octicon octicon-link"></span></a>2) Use the BNHtmlTable in your delegate :</h4>
+
+<h5>
+<a name="a-section-management" class="anchor" href="#a-section-management"><span class="octicon octicon-link"></span></a>a) Section management</h5>
+
+<p>The Object with @"Section" key must be a NSMutableArray containing a NSDictionnary per section with the following keys @"Title" that is a NSString and @"Rows" that is an int.</p>
+
+<pre><code>- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+        // Return the number of sections.
+    return [htmltable numberOfSections];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+        // Return the number of rows in the section.
+    return [htmltable numberOfRowsInSection:section];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+        // return section title
+    return [htmltable titleHeaderInSection:section];
+}
+</code></pre>
+
+<h5>
+<a name="b-cell-setup-with-the-nsdictionnary-using-litterals" class="anchor" href="#b-cell-setup-with-the-nsdictionnary-using-litterals"><span class="octicon octicon-link"></span></a>b) Cell setup with the NSDictionnary using litterals</h5>
+
+<pre><code>- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"myidentifier"];
+NSDictionary *hcell=[htmltable rowAtIndexPath:indexPath];
+// Set the controls for example using outlet from IB
+self.keynameOutlet.text=hcell[@"keyname"];
+</code></pre>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
