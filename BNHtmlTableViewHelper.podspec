@@ -22,7 +22,5 @@ BNHtmlTableViewHelper
   s.requires_arc = true
 
   s.source_files = 'Classes'
-  s.ios.exclude_files = 'Classes/osx'
-  s.osx.exclude_files = 'Classes/ios'
   s.public_header_files = 'Classes/*.h'
 end
